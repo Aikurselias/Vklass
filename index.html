@@ -612,11 +612,7 @@
     <p class="msg" id="login-msg"></p>
     <button class="btn-submit" onclick="handleLogin()">Logga in →</button>
 
-    <!-- Saved accounts -->
-    <div class="saved-accounts" id="saved-accounts-section" style="display:none">
-      <p class="saved-accounts-title">Sparade konton</p>
-      <div id="saved-accounts-list"></div>
-    </div>
+
 
   </div>
 </div>
@@ -797,39 +793,13 @@ function handleLogout() {
   goTo('screen-org');
 }
 
-function fillAccount(username) {
-  document.getElementById('login-username').value = username;
-  document.getElementById('login-password').focus();
-}
 
-function deleteAccount(username, event) {
-  event.stopPropagation();
-  if (!confirm(`Ta bort kontot "${username}"?`)) return;
-  const accounts = getAccounts();
-  delete accounts[username];
-  saveAccounts(accounts);
-  renderSavedAccounts();
-}
-
-function renderSavedAccounts() {
-  const accounts = getAccounts();
-  const keys = Object.keys(accounts);
-  const section = document.getElementById('saved-accounts-section');
-  const list = document.getElementById('saved-accounts-list');
-  if (keys.length === 0) { section.style.display = 'none'; return; }
-  section.style.display = 'block';
-  list.innerHTML = keys.map(u => `
-    <span class="account-chip" onclick="fillAccount('${u}')">
-      👤 ${u}
-    </span>`).join('');
-}
 
 // ===== NAVIGATION =====
 function goTo(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(screenId).classList.add('active');
   if (screenId === 'screen-snake') initSnake();
-  if (screenId === 'screen-login') renderSavedAccounts();
   if (screenId === 'screen-minesweeper') initMinesweeper();
 }
 
