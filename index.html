@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vklass</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --blue: #1a3a6b;
+    --blue-hover: #142d55;
+    --green: #4caf50;
+    --bg: #f5f7fa;
+    --text: #1a1a2e;
+    --border: #dde3ec;
+    --white: #ffffff;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #2c5530;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  /* SCREENS */
+  .screen {
+    display: none;
+    position: fixed;
+    inset: 0;
+    animation: fadeIn 0.4s ease;
+  }
+  .screen.active { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* FOREST BACKGROUND */
+  .forest-bg {
+    position: absolute;
+    inset: 0;
+    background: url('https://images.unsplash.com/photo-1448375240586-882707db888b?w=1200&q=80') center/cover;
+    width: 60%;
+  }
+
+  /* RIGHT PANEL */
+  .panel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 42%;
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+    padding: 40px 50px;
+    overflow-y: auto;
+  }
+
+  .vklass-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+  .logo-v {
+    width: 60px;
+    height: 40px;
+  }
+  .logo-text {
+    font-size: 22px;
+    font-weight: 500;
+    color: #333;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.5px;
+    margin-bottom: 28px;
+    text-transform: uppercase;
+    font-size: 16px;
+  }
+
+  .btn-login {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    transition: background 0.2s;
+    width: 100%;
+    text-align: left;
+  }
+  .btn-login:hover { background: var(--blue-hover); }
+  .btn-login .icon { width: 24px; margin-right: 12px; opacity: 0.9; }
+  .btn-login .arrow { font-size: 18px; }
+  .btn-left { display: flex; align-items: center; }
+
+  .or-divider {
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+    margin: 16px 0;
+  }
+
+  select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: #555;
+    background: white;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+  }
+  select:focus { outline: 2px solid var(--blue); }
+
+  .back-link {
+    position: absolute;
+    top: 40px;
+    right: 50px;
+    color: var(--blue);
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .back-link:hover { text-decoration: underline; }
+
+  /* KUNGSBACKA SCREEN */
+  #screen-kungsbacka {
+    background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1400&q=80') center/cover;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-box {
+    background: white;
+    border-radius: 8px;
+    padding: 40px 48px;
+    min-width: 360px;
+    max-width: 420px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    animation: fadeIn 0.4s ease;
+  }
+
+  .kungsbacka-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+    gap: 10px;
+  }
+  .kungsbacka-logo {
+    width: 32px; height: 32px;
+    background: #1a3a6b;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 14px;
+  }
+  .kungsbacka-name { font-size: 18px; color: #333; font-weight: 500; }
+
+  .choose-text { color: #555; font-size: 14px; margin-bottom: 20px; }
+
+  .provider-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border: none;
+    background: none;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: #333;
+    transition: background 0.15s;
+    border-radius: 4px;
+    padding: 12px 8px;
+  }
+  .provider-btn:hover { background: #f5f7fa; }
+  .provider-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: white;
+  }
+  .icon-freja { background: #6b3fa0; }
+  .icon-kb { background: #3b7dd8; }
+  .icon-frejap { background: #2ecc71; font-size: 10px; }
+  .icon-bankid { background: #white; }
+
+  .bankid-img { width: 36px; height: 36px; }
+
+  /* LOGIN FORM SCREEN */
+  #screen-login {
+    background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1400&q=80') center/cover;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .login-form-box {
+    background: white;
+    border-radius: 8px;
+    padding: 48px 52px;
+    min-width: 400px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    animation: fadeIn 0.4s ease;
+  }
+
+  .login-form-box h3 {
+    font-size: 20px;
+    margin-bottom: 8px;
+    color: #1a1a2e;
+  }
+  .login-form-box p {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 28px;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .form-group input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    transition: border 0.2s;
+  }
+  .form-group input:focus { outline: none; border-color: var(--blue); }
+
+  .btn-submit {
+    width: 100%;
+    padding: 14px;
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s;
+  }
+  .btn-submit:hover { background: var(--blue-hover); }
+
+  .error-msg {
+    color: #e53e3e;
+    font-size: 13px;
+    margin-top: 8px;
+    display: none;
+  }
+
+  /* GRADES SCREEN */
+  #screen-grades {
+    background: linear-gradient(135deg, #0f1e3d 0%, #1a3a6b 60%, #0d2b4e 100%);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+
+  .grades-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 48px 56px;
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+    backdrop-filter: blur(20px);
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .grades-title {
+    color: rgba(255,255,255,0.6);
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .grades-name {
+    color: white;
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    margin-bottom: 32px;
+  }
+
+  .subject-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .subject-item {
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 12px;
+    color: white;
+    font-size: 13px;
+  }
+  .subject-item .grade {
+    font-size: 26px;
+    font-weight: 700;
+    color: #4cff91;
+    font-family: 'DM Serif Display', serif;
+    display: block;
+    margin-top: 4px;
+  }
+
+  .congrats-badge {
+    display: inline-block;
+    background: linear-gradient(90deg, #4cff91, #00c9ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 28px;
+  }
+
+  .btn-snake {
+    background: linear-gradient(90deg, #4cff91, #00c9ff);
+    color: #0f1e3d;
+    border: none;
+    border-radius: 50px;
+    padding: 16px 40px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .btn-snake:hover {
+    transform: scale(1.04);
+    box-shadow: 0 8px 30px rgba(76,255,145,0.4);
+  }
+
+  /* SNAKE SCREEN */
+  #screen-snake {
+    background: #0a0a0f;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .snake-header {
+    color: white;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+
+  #snake-canvas {
+    border: 2px solid rgba(76,255,145,0.3);
+    border-radius: 4px;
+    display: block;
+  }
+
+  .snake-score {
+    color: #4cff91;
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 16px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .snake-instructions {
+    color: rgba(255,255,255,0.3);
+    font-size: 12px;
+    margin-top: 8px;
+    letter-spacing: 1px;
+  }
+
+  .snake-game-over {
+    display: none;
+    position: absolute;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .snake-game-over.show { display: flex; }
+  .snake-game-over h3 { color: white; font-size: 28px; }
+  .snake-game-over p { color: rgba(255,255,255,0.5); font-size: 14px; }
+
+  .btn-restart {
+    background: rgba(76,255,145,0.15);
+    border: 1px solid rgba(76,255,145,0.4);
+    color: #4cff91;
+    padding: 10px 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+  .btn-restart:hover { background: rgba(76,255,145,0.25); }
+
+  .snake-wrap { position: relative; display: flex; flex-direction: column; align-items: center; }
+  .overlay-gameover {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border-radius: 4px;
+  }
+  .overlay-gameover.show { display: flex; }
+  .overlay-gameover h3 { color: white; font-size: 32px; font-family: 'DM Serif Display', serif; }
+  .overlay-gameover p { color: rgba(255,255,255,0.5); font-size: 14px; }
+</style>
+</head>
+<body>
+
+<!-- SCREEN 1: Choose Organisation -->
+<div class="screen active" id="screen-org">
+  <div class="forest-bg"></div>
+  <div class="panel">
+    <div class="vklass-logo">
+      <svg class="logo-v" viewBox="0 0 60 42" fill="none">
+        <path d="M0 4L22 42L30 26L38 42L60 4H48L30 34L12 4H0Z" fill="#4caf50"/>
+      </svg>
+      <span class="logo-text">Vklass</span>
+    </div>
+    <h2>Logga in i Vklass</h2>
+    <button class="btn-login" onclick="goTo('screen-vklass-login')">
+      <span class="btn-left">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Logga in med BankID
+      </span>
+      <span class="arrow">→</span>
+    </button>
+    <button class="btn-login" onclick="goTo('screen-vklass-login')">
+      <span class="btn-left">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>
+        Logga in med Freja eID
+      </span>
+      <span class="arrow">→</span>
+    </button>
+    <button class="btn-login" onclick="goTo('screen-vklass-login')">
+      <span class="btn-left">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Logga in med Vklass inloggningsuppgifter
+      </span>
+      <span class="arrow">→</span>
+    </button>
+    <div class="or-divider">eller</div>
+    <select onchange="handleOrgSelect(this)">
+      <option value="">— Välj organisation —</option>
+      <option value="kungsbacka">Kungsbacka</option>
+      <option value="goteborg">Göteborg</option>
+      <option value="malmo">Malmö</option>
+      <option value="stockholm">Stockholm</option>
+    </select>
+  </div>
+</div>
+
+<!-- SCREEN 2: After org select - Kungsbacka options -->
+<div class="screen" id="screen-vklass-login">
+  <div class="forest-bg"></div>
+  <div class="panel">
+    <a class="back-link" onclick="goTo('screen-org')">Till start</a>
+    <div class="vklass-logo">
+      <svg class="logo-v" viewBox="0 0 60 42" fill="none">
+        <path d="M0 4L22 42L30 26L38 42L60 4H48L30 34L12 4H0Z" fill="#4caf50"/>
+      </svg>
+      <span class="logo-text">Vklass</span>
+    </div>
+    <h2>Logga in i Vklass</h2>
+    <button class="btn-login" onclick="goTo('screen-kungsbacka')">
+      <span class="btn-left">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>
+        Logga in med FrejaEID
+      </span>
+      <span class="arrow">→</span>
+    </button>
+    <button class="btn-login" onclick="goTo('screen-kungsbacka')">
+      <span class="btn-left">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg>
+        Logga in med Mobilt BankID
+      </span>
+      <span class="arrow">→</span>
+    </button>
+    <button class="btn-login" onclick="goTo('screen-kungsbacka')">
+      <span class="btn-left">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+        Logga in med Kungsbacka
+      </span>
+      <span class="arrow">→</span>
+    </button>
+  </div>
+</div>
+
+<!-- SCREEN 3: Kungsbacka identity selector -->
+<div class="screen" id="screen-kungsbacka">
+  <div class="modal-box">
+    <div class="kungsbacka-header">
+      <div class="kungsbacka-logo">K</div>
+      <span class="kungsbacka-name">Kungsbacka</span>
+    </div>
+    <p class="choose-text">Logga in med ett av följande konton</p>
+    <button class="provider-btn" onclick="goTo('screen-login')">
+      <div class="provider-icon icon-freja">FREJA</div>
+      <span>Tjänstelegitimation</span>
+    </button>
+    <button class="provider-btn" onclick="goTo('screen-login')">
+      <div class="provider-icon icon-kb">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <span>Kungsbacka kommun</span>
+    </button>
+    <button class="provider-btn" onclick="goTo('screen-login')">
+      <div class="provider-icon icon-frejap">FREJA+</div>
+      <span>Freja eID+</span>
+    </button>
+    <button class="provider-btn" onclick="goTo('screen-login')">
+      <div class="provider-icon" style="background:#1a3a6b; font-size:9px; font-weight:700; text-align:center; line-height:1.1">Bank<br>ID</div>
+      <span>BankID</span>
+    </button>
+    <br>
+    <a style="color:#3b7dd8; font-size:13px; cursor:pointer; text-decoration:none">Läs mer om hur du skaffar en e-legitimation</a>
+  </div>
+</div>
+
+<!-- SCREEN 4: Username/Password -->
+<div class="screen" id="screen-login">
+  <div class="login-form-box">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;">
+      <div class="kungsbacka-logo">K</div>
+      <span class="kungsbacka-name">Kungsbacka</span>
+    </div>
+    <h3>Logga in</h3>
+    <p>Ange dina inloggningsuppgifter för Kungsbacka</p>
+    <div class="form-group">
+      <label>Användarnamn</label>
+      <input type="text" id="username-input" placeholder="Ditt användarnamn" />
+    </div>
+    <div class="form-group">
+      <label>Lösenord</label>
+      <input type="password" id="password-input" placeholder="••••••••" />
+    </div>
+    <p class="error-msg" id="error-msg">Fel användarnamn eller lösenord. Försök igen!</p>
+    <button class="btn-submit" onclick="handleLogin()">Logga in →</button>
+  </div>
+</div>
+
+<!-- SCREEN 5: Grades -->
+<div class="screen" id="screen-grades">
+  <div class="grades-card">
+    <p class="grades-title">Vklass · Betygsöversikt</p>
+    <p class="grades-name">Välkommen tillbaka! 🎉</p>
+    <div class="subject-list">
+      <div class="subject-item">Matematik<span class="grade">A</span></div>
+      <div class="subject-item">Svenska<span class="grade">A</span></div>
+      <div class="subject-item">Engelska<span class="grade">A</span></div>
+      <div class="subject-item">Historia<span class="grade">A</span></div>
+      <div class="subject-item">Biologi<span class="grade">A</span></div>
+      <div class="subject-item">Kemi<span class="grade">A</span></div>
+      <div class="subject-item">Fysik<span class="grade">A</span></div>
+      <div class="subject-item">Idrott<span class="grade">A</span></div>
+      <div class="subject-item">Musik<span class="grade">A</span></div>
+    </div>
+    <p class="congrats-badge">⭐ Du har A i alla ämnen! Fantastiskt! ⭐</p>
+    <br>
+    <button class="btn-snake" onclick="startSnake()">🐍 Spela Snake</button>
+  </div>
+</div>
+
+<!-- SCREEN 6: Snake Game -->
+<div class="screen" id="screen-snake">
+  <p class="snake-header">🐍 Snake — Välförtjänt paus</p>
+  <div class="snake-wrap">
+    <canvas id="snake-canvas" width="480" height="480"></canvas>
+    <div class="overlay-gameover" id="game-over-overlay">
+      <h3>Game Over</h3>
+      <p id="final-score-text">Din poäng: 0</p>
+      <button class="btn-restart" onclick="restartSnake()">Spela igen</button>
+      <button class="btn-restart" style="margin-top:4px" onclick="goTo('screen-grades')">← Tillbaka till betyg</button>
+    </div>
+  </div>
+  <p class="snake-score" id="score-display">Poäng: 0</p>
+  <p class="snake-instructions">WASD eller piltangenter för att styra</p>
+</div>
+
+<script>
+function goTo(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
+  if (screenId === 'screen-snake') initSnake();
+}
+
+function handleOrgSelect(sel) {
+  if (sel.value) goTo('screen-vklass-login');
+  sel.value = '';
+}
+
+function handleLogin() {
+  const u = document.getElementById('username-input').value.trim();
+  const p = document.getElementById('password-input').value.trim();
+  const err = document.getElementById('error-msg');
+  if (!u || !p) {
+    err.style.display = 'block';
+    err.textContent = 'Fyll i både användarnamn och lösenord!';
+    return;
+  }
+  err.style.display = 'none';
+  goTo('screen-grades');
+}
+
+// ===== SNAKE GAME =====
+let snakeGame = null;
+
+function startSnake() {
+  goTo('screen-snake');
+}
+
+function initSnake() {
+  document.getElementById('game-over-overlay').classList.remove('show');
+  if (snakeGame) snakeGame.destroy();
+  snakeGame = new SnakeGame('snake-canvas', 'score-display', 'game-over-overlay', 'final-score-text');
+  snakeGame.start();
+}
+
+function restartSnake() {
+  initSnake();
+}
+
+class SnakeGame {
+  constructor(canvasId, scoreId, overlayId, finalScoreId) {
+    this.canvas = document.getElementById(canvasId);
+    this.ctx = this.canvas.getContext('2d');
+    this.scoreEl = document.getElementById(scoreId);
+    this.overlay = document.getElementById(overlayId);
+    this.finalScoreEl = document.getElementById(finalScoreId);
+    this.cell = 24;
+    this.cols = this.canvas.width / this.cell;
+    this.rows = this.canvas.height / this.cell;
+    this.reset();
+    this.keyHandler = (e) => this.handleKey(e);
+    document.addEventListener('keydown', this.keyHandler);
+  }
+
+  reset() {
+    this.snake = [{x:10, y:10},{x:9,y:10},{x:8,y:10}];
+    this.dir = {x:1, y:0};
+    this.nextDir = {x:1, y:0};
+    this.food = this.randomFood();
+    this.score = 0;
+    this.alive = true;
+    this.speed = 120;
+    this.lastTime = 0;
+  }
+
+  randomFood() {
+    let pos;
+    do {
+      pos = {
+        x: Math.floor(Math.random() * this.cols),
+        y: Math.floor(Math.random() * this.rows)
+      };
+    } while (this.snake && this.snake.some(s => s.x === pos.x && s.y === pos.y));
+    return pos;
+  }
+
+  handleKey(e) {
+    const map = {
+      'ArrowUp': {x:0,y:-1}, 'w': {x:0,y:-1}, 'W': {x:0,y:-1},
+      'ArrowDown': {x:0,y:1}, 's': {x:0,y:1}, 'S': {x:0,y:1},
+      'ArrowLeft': {x:-1,y:0}, 'a': {x:-1,y:0}, 'A': {x:-1,y:0},
+      'ArrowRight': {x:1,y:0}, 'd': {x:1,y:0}, 'D': {x:1,y:0},
+    };
+    const d = map[e.key];
+    if (d && !(d.x === -this.dir.x && d.y === -this.dir.y)) {
+      this.nextDir = d;
+      e.preventDefault();
+    }
+  }
+
+  start() {
+    this.raf = requestAnimationFrame((t) => this.loop(t));
+  }
+
+  loop(timestamp) {
+    if (!this.alive) return;
+    this.raf = requestAnimationFrame((t) => this.loop(t));
+    if (timestamp - this.lastTime < this.speed) { this.draw(); return; }
+    this.lastTime = timestamp;
+    this.dir = this.nextDir;
+    this.update();
+    this.draw();
+  }
+
+  update() {
+    const head = {
+      x: this.snake[0].x + this.dir.x,
+      y: this.snake[0].y + this.dir.y
+    };
+    // wall collision
+    if (head.x < 0 || head.x >= this.cols || head.y < 0 || head.y >= this.rows) {
+      this.gameOver(); return;
+    }
+    // self collision
+    if (this.snake.some(s => s.x === head.x && s.y === head.y)) {
+      this.gameOver(); return;
+    }
+    this.snake.unshift(head);
+    if (head.x === this.food.x && head.y === this.food.y) {
+      this.score++;
+      this.scoreEl.textContent = 'Poäng: ' + this.score;
+      this.food = this.randomFood();
+      if (this.speed > 50) this.speed -= 3;
+    } else {
+      this.snake.pop();
+    }
+  }
+
+  draw() {
+    const ctx = this.ctx;
+    const c = this.cell;
+    // background
+    ctx.fillStyle = '#0a0a0f';
+    ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    // grid
+    ctx.strokeStyle = 'rgba(76,255,145,0.04)';
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x < this.cols; x++) {
+      ctx.beginPath(); ctx.moveTo(x*c, 0); ctx.lineTo(x*c, this.canvas.height); ctx.stroke();
+    }
+    for (let y = 0; y < this.rows; y++) {
+      ctx.beginPath(); ctx.moveTo(0, y*c); ctx.lineTo(this.canvas.width, y*c); ctx.stroke();
+    }
+
+    // food
+    ctx.fillStyle = '#ff6b6b';
+    ctx.shadowColor = '#ff6b6b';
+    ctx.shadowBlur = 12;
+    ctx.beginPath();
+    ctx.arc(this.food.x*c + c/2, this.food.y*c + c/2, c/2 - 3, 0, Math.PI*2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // snake
+    this.snake.forEach((seg, i) => {
+      const t = i / this.snake.length;
+      ctx.fillStyle = `rgba(76,255,145,${1 - t * 0.6})`;
+      ctx.shadowColor = i === 0 ? '#4cff91' : 'transparent';
+      ctx.shadowBlur = i === 0 ? 16 : 0;
+      const pad = i === 0 ? 1 : 2;
+      ctx.beginPath();
+      ctx.roundRect(seg.x*c + pad, seg.y*c + pad, c - pad*2, c - pad*2, i === 0 ? 6 : 3);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    });
+  }
+
+  gameOver() {
+    this.alive = false;
+    this.finalScoreEl.textContent = `Din poäng: ${this.score}`;
+    this.overlay.classList.add('show');
+  }
+
+  destroy() {
+    document.removeEventListener('keydown', this.keyHandler);
+    if (this.raf) cancelAnimationFrame(this.raf);
+  }
+}
+</script>
+</body>
+</html>
