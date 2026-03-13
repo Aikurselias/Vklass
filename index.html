@@ -26,7 +26,6 @@
     overflow: hidden;
   }
 
-  /* SCREENS */
   .screen {
     display: none;
     position: fixed;
@@ -40,7 +39,6 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* FOREST BACKGROUND */
   .forest-bg {
     position: absolute;
     inset: 0;
@@ -48,7 +46,6 @@
     width: 60%;
   }
 
-  /* RIGHT PANEL */
   .panel {
     position: absolute;
     right: 0;
@@ -68,10 +65,7 @@
     align-items: center;
     margin-bottom: 40px;
   }
-  .logo-v {
-    width: 60px;
-    height: 40px;
-  }
+  .logo-v { width: 60px; height: 40px; }
   .logo-text {
     font-size: 22px;
     font-weight: 500;
@@ -81,13 +75,12 @@
   }
 
   h2 {
-    font-size: 22px;
+    font-size: 16px;
     font-weight: 600;
     color: var(--text);
     letter-spacing: 0.5px;
     margin-bottom: 28px;
     text-transform: uppercase;
-    font-size: 16px;
   }
 
   .btn-login {
@@ -186,7 +179,6 @@
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 14px 0;
     border: none;
     background: none;
     border-bottom: 1px solid #eee;
@@ -208,9 +200,6 @@
   .icon-freja { background: #6b3fa0; }
   .icon-kb { background: #3b7dd8; }
   .icon-frejap { background: #2ecc71; font-size: 10px; }
-  .icon-bankid { background: #white; }
-
-  .bankid-img { width: 36px; height: 36px; }
 
   /* LOGIN FORM SCREEN */
   #screen-login {
@@ -223,7 +212,7 @@
     background: white;
     border-radius: 8px;
     padding: 48px 52px;
-    min-width: 400px;
+    min-width: 420px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.15);
     animation: fadeIn 0.4s ease;
   }
@@ -233,15 +222,41 @@
     margin-bottom: 8px;
     color: #1a1a2e;
   }
-  .login-form-box p {
+  .login-form-box p.subtitle {
     font-size: 13px;
     color: #888;
     margin-bottom: 28px;
   }
 
-  .form-group {
-    margin-bottom: 16px;
+  /* TABS */
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 24px;
   }
+  .tab-btn {
+    flex: 1;
+    padding: 10px;
+    background: none;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #888;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    color: var(--blue);
+    border-bottom-color: var(--blue);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .form-group { margin-bottom: 16px; }
   .form-group label {
     display: block;
     font-size: 13px;
@@ -276,12 +291,51 @@
   }
   .btn-submit:hover { background: var(--blue-hover); }
 
-  .error-msg {
-    color: #e53e3e;
+  .msg {
     font-size: 13px;
-    margin-top: 8px;
+    margin-top: 10px;
     display: none;
+    padding: 8px 12px;
+    border-radius: 4px;
   }
+  .msg.error { color: #c0392b; background: #fdf0ee; display: block; }
+  .msg.success { color: #27ae60; background: #edfaf1; display: block; }
+
+  /* Saved accounts list */
+  .saved-accounts {
+    margin-top: 20px;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+  .saved-accounts-title {
+    font-size: 12px;
+    color: #aaa;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .account-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #f0f4ff;
+    border: 1px solid #c5d2f0;
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 13px;
+    color: var(--blue);
+    margin: 4px 4px 0 0;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .account-chip:hover { background: #dce6ff; }
+  .account-chip .chip-x {
+    color: #aaa;
+    font-size: 15px;
+    line-height: 1;
+    margin-left: 2px;
+  }
+  .account-chip .chip-x:hover { color: #e53e3e; }
 
   /* GRADES SCREEN */
   #screen-grades {
@@ -373,6 +427,22 @@
     box-shadow: 0 8px 30px rgba(76,255,145,0.4);
   }
 
+  .logout-btn {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.7);
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .logout-btn:hover { background: rgba(255,255,255,0.2); }
+
   /* SNAKE SCREEN */
   #screen-snake {
     background: #0a0a0f;
@@ -410,17 +480,6 @@
     margin-top: 8px;
     letter-spacing: 1px;
   }
-
-  .snake-game-over {
-    display: none;
-    position: absolute;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-  }
-  .snake-game-over.show { display: flex; }
-  .snake-game-over h3 { color: white; font-size: 28px; }
-  .snake-game-over p { color: rgba(255,255,255,0.5); font-size: 14px; }
 
   .btn-restart {
     background: rgba(76,255,145,0.15);
@@ -497,7 +556,7 @@
   </div>
 </div>
 
-<!-- SCREEN 2: After org select - Kungsbacka options -->
+<!-- SCREEN 2: Vklass login methods -->
 <div class="screen" id="screen-vklass-login">
   <div class="forest-bg"></div>
   <div class="panel">
@@ -564,33 +623,67 @@
   </div>
 </div>
 
-<!-- SCREEN 4: Username/Password -->
+<!-- SCREEN 4: Login / Register -->
 <div class="screen" id="screen-login">
   <div class="login-form-box">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;">
       <div class="kungsbacka-logo">K</div>
       <span class="kungsbacka-name">Kungsbacka</span>
     </div>
-    <h3>Logga in</h3>
-    <p>Ange dina inloggningsuppgifter för Kungsbacka</p>
-    <div class="form-group">
-      <label>Användarnamn</label>
-      <input type="text" id="username-input" placeholder="Ditt användarnamn" />
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('login')">Logga in</button>
+      <button class="tab-btn" onclick="switchTab('register')">Skapa konto</button>
     </div>
-    <div class="form-group">
-      <label>Lösenord</label>
-      <input type="password" id="password-input" placeholder="••••••••" />
+
+    <!-- Login tab -->
+    <div class="tab-panel active" id="tab-login">
+      <div class="form-group">
+        <label>Användarnamn</label>
+        <input type="text" id="login-username" placeholder="Ditt användarnamn" />
+      </div>
+      <div class="form-group">
+        <label>Lösenord</label>
+        <input type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')handleLogin()" />
+      </div>
+      <p class="msg" id="login-msg"></p>
+      <button class="btn-submit" onclick="handleLogin()">Logga in →</button>
+
+      <!-- Saved accounts -->
+      <div class="saved-accounts" id="saved-accounts-section" style="display:none">
+        <p class="saved-accounts-title">Sparade konton</p>
+        <div id="saved-accounts-list"></div>
+      </div>
     </div>
-    <p class="error-msg" id="error-msg">Fel användarnamn eller lösenord. Försök igen!</p>
-    <button class="btn-submit" onclick="handleLogin()">Logga in →</button>
+
+    <!-- Register tab -->
+    <div class="tab-panel" id="tab-register">
+      <div class="form-group">
+        <label>Välj användarnamn</label>
+        <input type="text" id="reg-username" placeholder="Ditt användarnamn" />
+      </div>
+      <div class="form-group">
+        <label>Välj lösenord</label>
+        <input type="password" id="reg-password" placeholder="••••••••" />
+      </div>
+      <div class="form-group">
+        <label>Bekräfta lösenord</label>
+        <input type="password" id="reg-password2" placeholder="••••••••" onkeydown="if(event.key==='Enter')handleRegister()" />
+      </div>
+      <p class="msg" id="register-msg"></p>
+      <button class="btn-submit" onclick="handleRegister()">Skapa konto →</button>
+    </div>
+
   </div>
 </div>
 
 <!-- SCREEN 5: Grades -->
 <div class="screen" id="screen-grades">
+  <button class="logout-btn" onclick="handleLogout()">Logga ut</button>
   <div class="grades-card">
     <p class="grades-title">Vklass · Betygsöversikt</p>
-    <p class="grades-name">Välkommen tillbaka! 🎉</p>
+    <p class="grades-name" id="grades-welcome">Välkommen tillbaka! 🎉</p>
     <div class="subject-list">
       <div class="subject-item">Matematik<span class="grade">A</span></div>
       <div class="subject-item">Svenska<span class="grade">A</span></div>
@@ -625,10 +718,148 @@
 </div>
 
 <script>
+// ===== ACCOUNT SYSTEM (localStorage) =====
+
+const ACCOUNTS_KEY = 'vklass_accounts'; // stores { username: password, ... }
+let currentUser = null;
+
+function getAccounts() {
+  try {
+    return JSON.parse(localStorage.getItem(ACCOUNTS_KEY)) || {};
+  } catch { return {}; }
+}
+
+function saveAccounts(accounts) {
+  localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
+}
+
+function handleRegister() {
+  const username = document.getElementById('reg-username').value.trim();
+  const password = document.getElementById('reg-password').value;
+  const password2 = document.getElementById('reg-password2').value;
+  const msg = document.getElementById('register-msg');
+
+  msg.className = 'msg';
+
+  if (!username || !password) {
+    msg.className = 'msg error'; msg.textContent = 'Fyll i alla fält!'; return;
+  }
+  if (password !== password2) {
+    msg.className = 'msg error'; msg.textContent = 'Lösenorden matchar inte!'; return;
+  }
+  if (username.length < 3) {
+    msg.className = 'msg error'; msg.textContent = 'Användarnamnet måste vara minst 3 tecken!'; return;
+  }
+  if (password.length < 4) {
+    msg.className = 'msg error'; msg.textContent = 'Lösenordet måste vara minst 4 tecken!'; return;
+  }
+
+  const accounts = getAccounts();
+  if (accounts[username]) {
+    msg.className = 'msg error'; msg.textContent = 'Det användarnamnet är redan taget!'; return;
+  }
+
+  accounts[username] = password;
+  saveAccounts(accounts);
+
+  msg.className = 'msg success'; msg.textContent = `✓ Kontot "${username}" skapades! Loggar in...`;
+
+  // Auto-login after short delay
+  setTimeout(() => {
+    currentUser = username;
+    loginSuccess(username);
+  }, 900);
+}
+
+function handleLogin() {
+  const username = document.getElementById('login-username').value.trim();
+  const password = document.getElementById('login-password').value;
+  const msg = document.getElementById('login-msg');
+
+  msg.className = 'msg';
+
+  if (!username || !password) {
+    msg.className = 'msg error'; msg.textContent = 'Fyll i både användarnamn och lösenord!'; return;
+  }
+
+  const accounts = getAccounts();
+  if (!accounts[username]) {
+    msg.className = 'msg error'; msg.textContent = 'Kontot finns inte. Skapa ett konto först!'; return;
+  }
+  if (accounts[username] !== password) {
+    msg.className = 'msg error'; msg.textContent = 'Fel lösenord. Försök igen!'; return;
+  }
+
+  currentUser = username;
+  loginSuccess(username);
+}
+
+function loginSuccess(username) {
+  document.getElementById('grades-welcome').textContent = `Välkommen, ${username}! 🎉`;
+  goTo('screen-grades');
+}
+
+function handleLogout() {
+  currentUser = null;
+  document.getElementById('login-username').value = '';
+  document.getElementById('login-password').value = '';
+  document.getElementById('login-msg').className = 'msg';
+  goTo('screen-org');
+}
+
+// Fill in username when clicking a saved account chip
+function fillAccount(username) {
+  document.getElementById('login-username').value = username;
+  document.getElementById('login-password').focus();
+}
+
+function deleteAccount(username, event) {
+  event.stopPropagation();
+  if (!confirm(`Ta bort kontot "${username}"?`)) return;
+  const accounts = getAccounts();
+  delete accounts[username];
+  saveAccounts(accounts);
+  renderSavedAccounts();
+}
+
+function renderSavedAccounts() {
+  const accounts = getAccounts();
+  const keys = Object.keys(accounts);
+  const section = document.getElementById('saved-accounts-section');
+  const list = document.getElementById('saved-accounts-list');
+
+  if (keys.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+
+  section.style.display = 'block';
+  list.innerHTML = keys.map(u => `
+    <span class="account-chip" onclick="fillAccount('${u}')">
+      👤 ${u}
+      <span class="chip-x" onclick="deleteAccount('${u}', event)" title="Ta bort">×</span>
+    </span>
+  `).join('');
+}
+
+// Tab switching
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', (i === 0) === (tab === 'login'));
+  });
+  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+  // Clear messages
+  document.getElementById('login-msg').className = 'msg';
+  document.getElementById('register-msg').className = 'msg';
+}
+
+// ===== NAVIGATION =====
 function goTo(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(screenId).classList.add('active');
   if (screenId === 'screen-snake') initSnake();
+  if (screenId === 'screen-login') renderSavedAccounts();
 }
 
 function handleOrgSelect(sel) {
@@ -636,25 +867,10 @@ function handleOrgSelect(sel) {
   sel.value = '';
 }
 
-function handleLogin() {
-  const u = document.getElementById('username-input').value.trim();
-  const p = document.getElementById('password-input').value.trim();
-  const err = document.getElementById('error-msg');
-  if (!u || !p) {
-    err.style.display = 'block';
-    err.textContent = 'Fyll i både användarnamn och lösenord!';
-    return;
-  }
-  err.style.display = 'none';
-  goTo('screen-grades');
-}
-
 // ===== SNAKE GAME =====
 let snakeGame = null;
 
-function startSnake() {
-  goTo('screen-snake');
-}
+function startSnake() { goTo('screen-snake'); }
 
 function initSnake() {
   document.getElementById('game-over-overlay').classList.remove('show');
@@ -663,9 +879,7 @@ function initSnake() {
   snakeGame.start();
 }
 
-function restartSnake() {
-  initSnake();
-}
+function restartSnake() { initSnake(); }
 
 class SnakeGame {
   constructor(canvasId, scoreId, overlayId, finalScoreId) {
@@ -683,9 +897,9 @@ class SnakeGame {
   }
 
   reset() {
-    this.snake = [{x:10, y:10},{x:9,y:10},{x:8,y:10}];
-    this.dir = {x:1, y:0};
-    this.nextDir = {x:1, y:0};
+    this.snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}];
+    this.dir = {x:1,y:0};
+    this.nextDir = {x:1,y:0};
     this.food = this.randomFood();
     this.score = 0;
     this.alive = true;
@@ -696,35 +910,29 @@ class SnakeGame {
   randomFood() {
     let pos;
     do {
-      pos = {
-        x: Math.floor(Math.random() * this.cols),
-        y: Math.floor(Math.random() * this.rows)
-      };
-    } while (this.snake && this.snake.some(s => s.x === pos.x && s.y === pos.y));
+      pos = { x: Math.floor(Math.random()*this.cols), y: Math.floor(Math.random()*this.rows) };
+    } while (this.snake && this.snake.some(s => s.x===pos.x && s.y===pos.y));
     return pos;
   }
 
   handleKey(e) {
     const map = {
-      'ArrowUp': {x:0,y:-1}, 'w': {x:0,y:-1}, 'W': {x:0,y:-1},
-      'ArrowDown': {x:0,y:1}, 's': {x:0,y:1}, 'S': {x:0,y:1},
-      'ArrowLeft': {x:-1,y:0}, 'a': {x:-1,y:0}, 'A': {x:-1,y:0},
-      'ArrowRight': {x:1,y:0}, 'd': {x:1,y:0}, 'D': {x:1,y:0},
+      'ArrowUp':{x:0,y:-1},'w':{x:0,y:-1},'W':{x:0,y:-1},
+      'ArrowDown':{x:0,y:1},'s':{x:0,y:1},'S':{x:0,y:1},
+      'ArrowLeft':{x:-1,y:0},'a':{x:-1,y:0},'A':{x:-1,y:0},
+      'ArrowRight':{x:1,y:0},'d':{x:1,y:0},'D':{x:1,y:0},
     };
     const d = map[e.key];
-    if (d && !(d.x === -this.dir.x && d.y === -this.dir.y)) {
-      this.nextDir = d;
-      e.preventDefault();
+    if (d && !(d.x===-this.dir.x && d.y===-this.dir.y)) {
+      this.nextDir = d; e.preventDefault();
     }
   }
 
-  start() {
-    this.raf = requestAnimationFrame((t) => this.loop(t));
-  }
+  start() { this.raf = requestAnimationFrame(t => this.loop(t)); }
 
   loop(timestamp) {
     if (!this.alive) return;
-    this.raf = requestAnimationFrame((t) => this.loop(t));
+    this.raf = requestAnimationFrame(t => this.loop(t));
     if (timestamp - this.lastTime < this.speed) { this.draw(); return; }
     this.lastTime = timestamp;
     this.dir = this.nextDir;
@@ -733,20 +941,11 @@ class SnakeGame {
   }
 
   update() {
-    const head = {
-      x: this.snake[0].x + this.dir.x,
-      y: this.snake[0].y + this.dir.y
-    };
-    // wall collision
-    if (head.x < 0 || head.x >= this.cols || head.y < 0 || head.y >= this.rows) {
-      this.gameOver(); return;
-    }
-    // self collision
-    if (this.snake.some(s => s.x === head.x && s.y === head.y)) {
-      this.gameOver(); return;
-    }
+    const head = { x: this.snake[0].x + this.dir.x, y: this.snake[0].y + this.dir.y };
+    if (head.x<0 || head.x>=this.cols || head.y<0 || head.y>=this.rows) { this.gameOver(); return; }
+    if (this.snake.some(s => s.x===head.x && s.y===head.y)) { this.gameOver(); return; }
     this.snake.unshift(head);
-    if (head.x === this.food.x && head.y === this.food.y) {
+    if (head.x===this.food.x && head.y===this.food.y) {
       this.score++;
       this.scoreEl.textContent = 'Poäng: ' + this.score;
       this.food = this.randomFood();
@@ -757,40 +956,28 @@ class SnakeGame {
   }
 
   draw() {
-    const ctx = this.ctx;
-    const c = this.cell;
-    // background
+    const ctx = this.ctx, c = this.cell;
     ctx.fillStyle = '#0a0a0f';
     ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-    // grid
     ctx.strokeStyle = 'rgba(76,255,145,0.04)';
     ctx.lineWidth = 0.5;
-    for (let x = 0; x < this.cols; x++) {
-      ctx.beginPath(); ctx.moveTo(x*c, 0); ctx.lineTo(x*c, this.canvas.height); ctx.stroke();
-    }
-    for (let y = 0; y < this.rows; y++) {
-      ctx.beginPath(); ctx.moveTo(0, y*c); ctx.lineTo(this.canvas.width, y*c); ctx.stroke();
-    }
-
-    // food
+    for (let x=0; x<this.cols; x++) { ctx.beginPath(); ctx.moveTo(x*c,0); ctx.lineTo(x*c,this.canvas.height); ctx.stroke(); }
+    for (let y=0; y<this.rows; y++) { ctx.beginPath(); ctx.moveTo(0,y*c); ctx.lineTo(this.canvas.width,y*c); ctx.stroke(); }
     ctx.fillStyle = '#ff6b6b';
     ctx.shadowColor = '#ff6b6b';
     ctx.shadowBlur = 12;
     ctx.beginPath();
-    ctx.arc(this.food.x*c + c/2, this.food.y*c + c/2, c/2 - 3, 0, Math.PI*2);
+    ctx.arc(this.food.x*c+c/2, this.food.y*c+c/2, c/2-3, 0, Math.PI*2);
     ctx.fill();
     ctx.shadowBlur = 0;
-
-    // snake
     this.snake.forEach((seg, i) => {
       const t = i / this.snake.length;
-      ctx.fillStyle = `rgba(76,255,145,${1 - t * 0.6})`;
-      ctx.shadowColor = i === 0 ? '#4cff91' : 'transparent';
-      ctx.shadowBlur = i === 0 ? 16 : 0;
-      const pad = i === 0 ? 1 : 2;
+      ctx.fillStyle = `rgba(76,255,145,${1 - t*0.6})`;
+      ctx.shadowColor = i===0 ? '#4cff91' : 'transparent';
+      ctx.shadowBlur = i===0 ? 16 : 0;
+      const pad = i===0 ? 1 : 2;
       ctx.beginPath();
-      ctx.roundRect(seg.x*c + pad, seg.y*c + pad, c - pad*2, c - pad*2, i === 0 ? 6 : 3);
+      ctx.roundRect(seg.x*c+pad, seg.y*c+pad, c-pad*2, c-pad*2, i===0 ? 6 : 3);
       ctx.fill();
       ctx.shadowBlur = 0;
     });
