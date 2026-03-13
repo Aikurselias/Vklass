@@ -21,7 +21,7 @@
 
   body {
     font-family: 'DM Sans', sans-serif;
-    background: #2c5530;
+    background: #0f1e3d;
     min-height: 100vh;
     overflow: hidden;
   }
@@ -30,13 +30,13 @@
     display: none;
     position: fixed;
     inset: 0;
-    animation: fadeIn 0.4s ease;
   }
   .screen.active { display: flex; }
+  .screen.animating { animation: fadeIn 0.25s ease; }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   .forest-bg {
@@ -757,10 +757,13 @@ function renderAdminPanel() {
   document.getElementById('admin-accounts-list').innerHTML = keys.length === 0
     ? '<span style="color:rgba(255,255,255,0.3);font-size:13px">Inga konton registrerade ännu</span>'
     : keys.map(u => `
-        <span style="background:rgba(255,255,255,0.1);border-radius:20px;padding:5px 14px;font-size:13px;color:white;display:inline-flex;align-items:center;gap:8px">
-          👤 ${u}
-          <span onclick="adminDeleteAccount('${u}')" style="color:#ff6b6b;cursor:pointer;font-size:15px" title="Ta bort">×</span>
-        </span>`).join('');
+        <div style="background:rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;font-size:13px;color:white;display:flex;align-items:center;gap:10px;margin-bottom:6px">
+          <span style="opacity:0.5">👤</span>
+          <span style="flex:1;font-weight:500">${u}</span>
+          <span style="color:rgba(255,255,255,0.35);font-size:12px">lösenord:</span>
+          <span style="font-family:monospace;background:rgba(0,0,0,0.3);padding:3px 8px;border-radius:4px;color:#4cff91;letter-spacing:1px">${accounts[u]}</span>
+          <span onclick="adminDeleteAccount('${u}')" style="color:#ff6b6b;cursor:pointer;font-size:16px;margin-left:4px" title="Ta bort">×</span>
+        </div>`).join('');
 }
 
 function adminDeleteAccount(username) {
@@ -809,8 +812,16 @@ function renderSavedAccounts() {
 
 // ===== NAVIGATION =====
 function goTo(screenId) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(screenId).classList.add('active');
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.classList.remove('animating');
+  });
+  const target = document.getElementById(screenId);
+  target.classList.add('active');
+  // Trigger animation without layout flash
+  requestAnimationFrame(() => {
+    target.classList.add('animating');
+  });
   if (screenId === 'screen-snake') initSnake();
   if (screenId === 'screen-login') renderSavedAccounts();
 }
