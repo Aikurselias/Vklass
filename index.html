@@ -32,12 +32,7 @@
     inset: 0;
   }
   .screen.active { display: flex; }
-  .screen.animating { animation: fadeIn 0.25s ease; }
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
 
   .forest-bg {
     position: absolute;
@@ -806,22 +801,13 @@ function renderSavedAccounts() {
   list.innerHTML = keys.map(u => `
     <span class="account-chip" onclick="fillAccount('${u}')">
       👤 ${u}
-      <span class="chip-x" onclick="deleteAccount('${u}', event)" title="Ta bort">×</span>
     </span>`).join('');
 }
 
 // ===== NAVIGATION =====
 function goTo(screenId) {
-  document.querySelectorAll('.screen').forEach(s => {
-    s.classList.remove('active');
-    s.classList.remove('animating');
-  });
-  const target = document.getElementById(screenId);
-  target.classList.add('active');
-  // Trigger animation without layout flash
-  requestAnimationFrame(() => {
-    target.classList.add('animating');
-  });
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
   if (screenId === 'screen-snake') initSnake();
   if (screenId === 'screen-login') renderSavedAccounts();
 }
